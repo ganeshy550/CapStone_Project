@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class TeamService {
 
+    public static Long id = 0l;
+
     @Autowired
     private TeamRepository teamRepository;
 
@@ -22,26 +24,54 @@ public class TeamService {
         if (teamNames.size() != 2) {
             return Mono.error(new IllegalArgumentException("Exactly two team names must be provided."));
         }
-
-        Team team1 = new Team(null, matchId, new ArrayList<>(), teamSize);
+    
+        // Create the first team
+        Team team1 = new Team();
+        team1.setId(id); // Ensure this matches your Team entity's field and method names
+        id++;
+        team1.setMatchId(matchId);
+        team1.setTeam(new ArrayList<>());
+        team1.setTeamSize(teamSize);
         team1.setTeamName(teamNames.get(0));
-
-        Team team2 = new Team(null, matchId, new ArrayList<>(), teamSize);
+    
+        // Create the second team
+        Team team2 = new Team();
+        team2.setId(id); // Ensure this matches your Team entity's field and method names
+        id++;
+        team2.setMatchId(matchId);
+        team2.setTeam(new ArrayList<>());
+        team2.setTeamSize(teamSize);
         team2.setTeamName(teamNames.get(1));
-
+    
+        // Save both teams to the repository
         return teamRepository.saveAll(List.of(team1, team2)).then();
     }
+    
 
-    public Mono<Team> registerUser(String matchId, String userId) {
+    public Mono<Team> registerUser(String matchId, String userId, String choice) {
         return teamRepository.findAllByMatchId(matchId)
-                .filter(team -> team.getTeam().size() < team.getTeamSize()) // Filter teams with available space
+                .filter(team -> {
+                    // Check if the chosen team has space based on the teamName and teamSize
+                    if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
+                        return team.getTeam().size() < team.getTeamSize(); // Check if Team A has space
+                    } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
+                        return team.getTeam().size() < team.getTeamSize(); // Check if Team B has space
+                    }
+                    return false; // If neither team has space, return false
+                })
                 .next() // Get the first team with space
                 .flatMap(team -> {
-                    team.getTeam().add(userId); // Add the user to the team
+                    // Add user to the chosen team
+                    if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
+                        team.getTeam().add(userId); // Add the user to Team A
+                    } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
+                        team.getTeam().add(userId); // Add the user to Team B
+                    }
                     return teamRepository.save(team); // Save the updated team
                 })
                 .switchIfEmpty(Mono.error(new RuntimeException("No available teams for match: " + matchId)));
     }
+    
     
 
     public Flux<Team> getTeamDetails(String matchId) {

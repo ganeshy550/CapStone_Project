@@ -1,24 +1,24 @@
 package com.capstone.teams.entity;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 @Document(collection = "teams")
 public class Team {
     @Id
-    private String id;
+    private Long id;
     private String matchId; // Unique identifier for the match
     private List<String> team;
     private int teamSize; // Maximum size of each team
     private int teamScore;
     private String teamName; // Name of the team
     
-    Team(){        
+    public Team(){        
     }
 
-    public Team(String id, String matchId, List<String> team, int teamSize) {
+    public Team(Long id, String matchId, List<String> team, int teamSize) {
         this.id = id;
         this.matchId = matchId;
         this.team = team;
@@ -36,11 +36,11 @@ public class Team {
         this.teamName = teamName;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

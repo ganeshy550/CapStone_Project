@@ -19,4 +19,6 @@ public interface MatchRepository extends ReactiveMongoRepository<Match,Long>{
 
     Flux<Match> findByLocation(String location);
 
+    Flux<Match> findByStatus(String status);
+
 }

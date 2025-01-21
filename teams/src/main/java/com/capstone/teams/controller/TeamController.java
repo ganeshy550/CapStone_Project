@@ -30,8 +30,8 @@ public class TeamController {
 
 
     @PostMapping("/register")
-    public Mono<Team> registerUser(@RequestParam String matchId, @RequestParam String userId) {
-        return teamService.registerUser(matchId, userId);
+    public Mono<Team> registerUser(@RequestParam String matchId, @RequestParam String userId, @RequestParam String choice) {
+        return teamService.registerUser(matchId, userId, choice);
     }
 
     @GetMapping("/{matchId}")

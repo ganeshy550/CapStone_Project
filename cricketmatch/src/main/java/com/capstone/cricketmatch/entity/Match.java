@@ -27,7 +27,7 @@ public class Match {
         this.location = location;
         this.teamSize = teamSize;
         code = generateCode();
-        winner = null;
+        winner = "-";
         status = "Upcoming";
     }
  

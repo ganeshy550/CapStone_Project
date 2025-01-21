@@ -1,8 +1,6 @@
 package com.capstone.cricketmatch.controller;
 
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,14 +39,19 @@ public class MatchController {
         return matchService.getMatchByCode(code);
     }
 
-    @GetMapping("/location/{location}") // Avoid ambiguous mappings
+    @GetMapping("/location/{location}") // working
     public Flux<Match> getMatchByLocation(@PathVariable String location) {
         return matchService.getMatchesByLocation(location);
     }
 
-    @GetMapping("/date/{date}") // Avoid ambiguous mappings
-    public Flux<Match> getMatchByDate(@PathVariable Date date) {
-        return matchService.getMatchesByDate(date);
+    // @GetMapping("/date/{date}") // Avoid ambiguous mappings
+    // public Flux<Match> getMatchByDate(@PathVariable Date date) {
+    //     return matchService.getMatchesByDate(date);
+    // }
+
+    @GetMapping("/status/{status}")
+    public Flux<Match> getMatchByStatus(@PathVariable String status) {
+        return matchService.getMatchesByStatus(status);
     }
 
     @PutMapping("/startMatch/{id}")
@@ -57,8 +60,15 @@ public class MatchController {
     }
 
 
-    @PutMapping("/updateMatchStatus/{id}")
-    public Mono<Match> updateMatchStatus(@PathVariable Long id, @RequestBody Match match) {
-        return matchService.updateMatchStatus(id, match.getWinner());
+    @PutMapping("/endMatch/{id}")
+    public Mono<Match> endMatch(@PathVariable Long id, @RequestBody Match match) {
+        return matchService.endMatch(id, match.getWinner());
     }
+
+    @GetMapping("/getMatchStats/{id}")
+    public Mono<Match> getMatchStats(@PathVariable Long id) {
+        return matchService.getMatchStats(id);
+    }
+
+
 }
