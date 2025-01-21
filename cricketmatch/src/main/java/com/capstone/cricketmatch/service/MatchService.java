@@ -1,6 +1,7 @@
 package com.capstone.cricketmatch.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,21 @@ public class MatchService {
     @Autowired
     private MatchRepository matchRepository;
 
+    @Autowired
+    private TeamServiceClient teamServiceClient;
+
     public Mono<Match> createMatch(Match match) {
-        return matchRepository.save(match);
+        return matchRepository.save(match)
+            .flatMap(savedMatch -> {
+                // Call Team Service to create teams
+                return teamServiceClient.createTeamsForMatch(
+                        savedMatch.getId().toString(),
+                        List.of(savedMatch.getTeam1(), savedMatch.getTeam2()),
+                        match.getTeamSize()
+                ).thenReturn(savedMatch);
+            });
     }
+
 
     public Flux<Match> getAllMatches(){
         return matchRepository.findAll();

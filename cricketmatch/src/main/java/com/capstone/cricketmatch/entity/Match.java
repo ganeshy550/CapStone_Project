@@ -12,23 +12,34 @@ public class Match {
     private Long id;
     private String team1;
     private String team2;
-    private String winner;
     private Date date;
     private String location;
+    private int teamSize;
+    private String winner;
     private String status;
     private String code;
     
-    public Match(Long id, String team1, String team2, Date date, String location) {
+    public Match(Long id, String team1, String team2, Date date, String location, int teamSize) {
         this.id = id;
         this.team1 = team1;
         this.team2 = team2;
         this.date = date;
         this.location = location;
+        this.teamSize = teamSize;
         code = generateCode();
         winner = null;
         status = "Upcoming";
     }
+ 
     
+    public int getTeamSize() {
+        return teamSize;
+    }
+
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
+    }
+
     public Long getId() {
         return id;
     }

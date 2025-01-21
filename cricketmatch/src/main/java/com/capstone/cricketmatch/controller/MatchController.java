@@ -25,17 +25,18 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
-    @GetMapping("/allMatches")
+    @GetMapping("/allMatches") //working
     public Flux<Match> allMatches() {
         return matchService.getAllMatches();
     }
 
-    @PostMapping("/createMatch")
+    @PostMapping("/createMatch") //working
     public Mono<Match> createMatch(@RequestBody Match match) {
         return matchService.createMatch(match);
     }
 
-    @GetMapping("/code/{code}") // Avoid ambiguous mappings
+
+    @GetMapping("/code/{code}") // working
     public Mono<Match> getMatchByCode(@PathVariable String code) {
         return matchService.getMatchByCode(code);
     }
