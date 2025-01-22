@@ -1,24 +1,23 @@
 package com.capstone.Players.model;
 
+import java.util.Random;
+
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
 public class User {
-    private static int userCount=0;
     @Id
-    private String userId;
-    @Indexed(unique = true)
+    private String userId="UID-"+generateCode();
     private String userName;
     private String userEmail;
-    private String userPhone;
     private String password;
     private String role;
 
-    private String userTeamId=null;
+    private String userTeamId="-";
     private int currentScore= 0;
-    private int totalScore = 0;
+    private int currentWickets=0;
+    
     private int totalWickets = 0;
     private int totalMatches = 0;
     private int highestScore = 0;
@@ -26,28 +25,34 @@ public class User {
     private int numberOfMatchesOrganized = 0;
     private int numberOfSupportStaff = 0;
     private int numberOfSponsors = 0;
-
+    private int totalScore = 0;
+    
     // Default constructor
     public User() {}
-
+    
     // Parameterized constructor
-    public User(String userName, String userEmail, String userPhone, String role) {
-        userId="U"+(++userCount);
+    public User(String userName, String userEmail, String role) {
         this.userName = userName;
         this.userEmail = userEmail;
-        this.userPhone = userPhone;
         this.role = role;
     }
-
+    
     // Getters and Setters
     // ... (same as previously defined)
     
+    
+    public int getCurrentWickets() {
+        return currentWickets;
+    }
 
-
+    public void setCurrentWickets(int currentWickets) {
+        this.currentWickets = currentWickets;
+    }
+    
     public String getUserId() {
         return userId;
     }
-
+    
     
     public String getPassword() {
         return password;
@@ -77,13 +82,6 @@ public class User {
         this.userEmail = userEmail;
     }
     
-    public String getUserPhone() {
-        return userPhone;
-    }
-    
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
     
     public String getUserTeamId() {
         return userTeamId;
@@ -164,13 +162,6 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-    public static int getUserCount() {
-        return userCount;
-    }
-    
-    public static void setUserCount(int userCount) {
-        User.userCount = userCount;
-    }
 
     public int getCurrentScore() {
         return currentScore;
@@ -178,5 +169,15 @@ public class User {
 
     public void setCurrentScore(int currentScore) {
         this.currentScore = currentScore;
+    }
+
+    public static String generateCode(){
+        StringBuilder code = new StringBuilder();
+        String possible = "0123456789";
+        Random random = new Random();
+        for (int i = 0; i < 4; i++) {
+            code.append(possible.charAt(random.nextInt(possible.length())));
+        }
+        return code.toString();
     }
 }

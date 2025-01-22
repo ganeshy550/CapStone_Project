@@ -27,7 +27,6 @@ public class UserService {
                 .flatMap(existingUser -> {
                     existingUser.setUserName(user.getUserName());
                     existingUser.setUserEmail(user.getUserEmail());
-                    existingUser.setUserPhone(user.getUserPhone());
                     existingUser.setUserTeamId(user.getUserTeamId());
                     existingUser.setTotalScore(user.getTotalScore());
                     existingUser.setTotalWickets(user.getTotalWickets());
@@ -46,10 +45,6 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
-    // Find user by phone number
-    public Mono<User> findByUserPhone(String userPhone) {
-        return userRepository.findByUserPhone(userPhone);
-    }
 
     // Retrieve player stats
     public Mono<PlayerStatsDTO> getPlayerStats(String userId) {
@@ -61,7 +56,9 @@ public class UserService {
                         user.getTotalWickets(),
                         user.getTotalMatches(),
                         user.getHighestScore(),
-                        user.getHighestWickets()
+                        user.getHighestWickets(),
+                        user.getCurrentScore(),
+                        user.getCurrentWickets()
                 ));
     }
     public Mono<BattingStatsDTO> getBattingStats(String userId) {
@@ -111,5 +108,13 @@ public class UserService {
 
                     return userRepository.save(user);
                 });
+    }
+
+    public Mono<User> findByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    public Mono<User> findByUserId(String userId) {
+        return userRepository.findByUserId(userId);
     }
 }

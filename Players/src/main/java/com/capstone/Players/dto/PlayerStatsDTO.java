@@ -9,10 +9,12 @@ public class PlayerStatsDTO {
     private int totalMatches;
     private int highestScore;
     private int highestWickets;
+    private int currentScore;
+    private int currentWickets;
 
     // Constructor
     public PlayerStatsDTO(String userId, String userName, int totalScore, int totalWickets,
-                          int totalMatches, int highestScore, int highestWickets) {
+                          int totalMatches, int highestScore, int highestWickets, int currentScore, int currentWickets) {
         this.userId = userId;
         this.userName = userName;
         this.totalScore = totalScore;
@@ -20,6 +22,8 @@ public class PlayerStatsDTO {
         this.totalMatches = totalMatches;
         this.highestScore = highestScore;
         this.highestWickets = highestWickets;
+        this.currentScore= currentScore;
+        this.currentWickets= currentWickets;
     }
 
     // Getters and Setters
@@ -69,6 +73,22 @@ public class PlayerStatsDTO {
 
     public void setHighestScore(int highestScore) {
         this.highestScore = highestScore;
+    }
+
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
+    }
+
+    public int getCurrentWickets() {
+        return currentWickets;
+    }
+
+    public void setCurrentWickets(int currentWickets) {
+        this.currentWickets = currentWickets;
     }
 
     public int getHighestWickets() {
