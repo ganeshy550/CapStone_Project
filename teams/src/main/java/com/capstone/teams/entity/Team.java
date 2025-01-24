@@ -1,5 +1,6 @@
 package com.capstone.teams.entity;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -10,20 +11,22 @@ public class Team {
     @Id
     private Long id;
     private String matchId; // Unique identifier for the match
-    private List<String> team;
+    private HashMap<String,List<Integer>> team;
     private int teamSize; // Maximum size of each team
     private int teamScore;
+    private int teamWickets;
     private String teamName; // Name of the team
     
     public Team(){        
     }
 
-    public Team(Long id, String matchId, List<String> team, int teamSize) {
+    public Team(Long id, String matchId, HashMap<String,List<Integer>> team, int teamSize) {
         this.id = id;
         this.matchId = matchId;
         this.team = team;
         this.teamSize = teamSize;
         teamScore = 0;
+        teamWickets = 0;
     }
 
 
@@ -52,11 +55,11 @@ public class Team {
         this.matchId = matchId;
     }
 
-    public List<String> getTeam() {
+    public HashMap<String,List<Integer>> getTeam() {
         return team;
     }
 
-    public void setTeam(List<String> team) {
+    public void setTeam(HashMap<String,List<Integer>> team) {
         this.team = team;
     }
 
@@ -74,6 +77,14 @@ public class Team {
 
     public void setTeamScore(int teamScore) {
         this.teamScore = teamScore;
+    }
+
+    public int getTeamWickets() {
+        return teamWickets;
+    }
+
+    public void setTeamWickets(int teamWickets) {
+        this.teamWickets = teamWickets;
     }
 
     

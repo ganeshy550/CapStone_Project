@@ -1,6 +1,7 @@
 package com.capstone.teams.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class TeamService {
 
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     public Mono<Void> createTeamsForMatch(String matchId, List<String> teamNames, int teamSize) {
         if (teamNames.size() != 2) {
@@ -30,7 +33,7 @@ public class TeamService {
         team1.setId(id); // Ensure this matches your Team entity's field and method names
         id++;
         team1.setMatchId(matchId);
-        team1.setTeam(new ArrayList<>());
+        team1.setTeam(new HashMap<String,List<Integer>>());
         team1.setTeamSize(teamSize);
         team1.setTeamName(teamNames.get(0));
     
@@ -39,7 +42,7 @@ public class TeamService {
         team2.setId(id); // Ensure this matches your Team entity's field and method names
         id++;
         team2.setMatchId(matchId);
-        team2.setTeam(new ArrayList<>());
+        team2.setTeam(new HashMap<String,List<Integer>>());
         team2.setTeamSize(teamSize);
         team2.setTeamName(teamNames.get(1));
     
@@ -48,32 +51,65 @@ public class TeamService {
     }
     
 
-    public Mono<Team> registerUser(String matchId, String userId, String choice) {
-        return teamRepository.findAllByMatchId(matchId)
-                .filter(team -> {
-                    // Check if the chosen team has space based on the teamName and teamSize
-                    if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
-                        return team.getTeam().size() < team.getTeamSize(); // Check if Team A has space
-                    } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
-                        return team.getTeam().size() < team.getTeamSize(); // Check if Team B has space
-                    }
-                    return false; // If neither team has space, return false
-                })
-                .next() // Get the first team with space
-                .flatMap(team -> {
-                    // Add user to the chosen team
-                    if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
-                        team.getTeam().add(userId); // Add the user to Team A
-                    } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
-                        team.getTeam().add(userId); // Add the user to Team B
-                    }
-                    return teamRepository.save(team); // Save the updated team
-                })
-                .switchIfEmpty(Mono.error(new RuntimeException("No available teams for match: " + matchId)));
-    }
-    
-    
+    // public Mono<Team> registerUser(String matchId, String userId, String choice) {
+    //     return teamRepository.findAllByMatchId(matchId)
+    //             .filter(team -> {
+    //                 // Check if the chosen team has space based on the teamName and teamSize
+    //                 if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
+    //                     return team.getTeam().size() < team.getTeamSize(); // Check if Team A has space
+    //                 } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
+    //                     return team.getTeam().size() < team.getTeamSize(); // Check if Team B has space
+    //                 }
+    //                 return false; // If neither team has space, return false
+    //             })
+    //             .next() // Get the first team with space
+    //             .flatMap(team -> {
+    //                 // Add user to the chosen team
+    //                 if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
+    //                     team.getTeam().put(userId, new ArrayList<Integer>()); // Add the user to Team A
+    //                     userServiceClient.updateTeam(userId, team.getId().toString()); // Update the user's team ID in the database
+    //                 } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
+    //                     team.getTeam().put(userId, new ArrayList<Integer>()); // Add the user to Team B
+    //                     userServiceClient.updateTeam(userId, team.getId().toString()); // Update the user's team ID in the database
+    //                 }
+    //                 return teamRepository.save(team); // Save the updated team
 
+    //             }).switchIfEmpty(Mono.error(new RuntimeException("No available teams for match: " + matchId)));
+    // }
+
+    // ... existing code ...
+
+public Mono<Team> registerUser(String matchId, String userId, String choice) {
+    return teamRepository.findAllByMatchId(matchId)
+            .filter(team -> {
+                if (choice.equals("Team A") && team.getTeamName().equals("Team A")) {
+                    return team.getTeam().size() < team.getTeamSize();
+                } else if (choice.equals("Team B") && team.getTeamName().equals("Team B")) {
+                    return team.getTeam().size() < team.getTeamSize();
+                }
+                return false;
+            })
+            .next()
+            .flatMap(team -> {
+                // Add user to the chosen team
+                if ((choice.equals("Team A") && team.getTeamName().equals("Team A")) ||
+                    (choice.equals("Team B") && team.getTeamName().equals("Team B"))) {
+                    team.getTeam().put(userId, new ArrayList<Integer>());
+                    
+                    // First update the team in the database
+                    return teamRepository.save(team)
+                            // Then update the user's team ID
+                            .flatMap(savedTeam -> 
+                                userServiceClient.updateTeam(userId, savedTeam.getId().toString())
+                                    .thenReturn(savedTeam)
+                            );
+                }
+                return Mono.just(team);
+            })
+            .switchIfEmpty(Mono.error(new RuntimeException("No available teams for match: " + matchId)));
+    }
+
+// ... existing code ...
     public Flux<Team> getTeamDetails(String matchId) {
         return teamRepository.findAllByMatchId(matchId);
     }
