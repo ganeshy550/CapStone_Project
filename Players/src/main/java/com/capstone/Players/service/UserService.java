@@ -15,6 +15,7 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
 
     // Create a new user
     public Mono<User> createUser(User user) {
@@ -37,6 +38,23 @@ public class UserService {
                     existingUser.setNumberOfSupportStaff(user.getNumberOfSupportStaff());
                     existingUser.setNumberOfSponsors(user.getNumberOfSponsors());
                     return userRepository.save(existingUser);
+                });
+    }
+
+    // public Mono<User> updatePlayer(String userId, User playerUpdate) {
+    //     return userRepository.findById(userId)
+    //             .flatMap(player -> {
+    //                 player.setCurrentScore(playerUpdate.getCurrentScore());
+    //                 player.setCurrentWickets(playerUpdate.getCurrentWickets());
+    //                 return userRepository.save(player);
+    //             });
+    // }
+
+    public Mono<User> updateTeamId(String userId, String teamId) {
+        return userRepository.findById(userId)
+                .flatMap(user -> {
+                    user.setUserTeamId(teamId);
+                    return userRepository.save(user);
                 });
     }
 

@@ -24,16 +24,21 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-
-
     // Create a new user
     @PostMapping("/createUser")
     public Mono<User> createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
+    // @PutMapping("/{userId}/update")
+    // public Mono<User> updatePlayer(@PathVariable String userId, @RequestBody User userUpdate) {
+    //     return userService.updatePlayer(userId, userUpdate)
+    //             .doOnSuccess(updatedUser -> 
+    //                 messagingTemplate.convertAndSend("/topic/user-updates", updatedUser));
+    // }
+
     // Update an existing user
+
     @PutMapping("/updateUser/{userId}")
     public Mono<User> updateUser(@PathVariable String userId, @RequestBody User user) {
         return userService.updateUser(userId, user);
@@ -83,5 +88,10 @@ public class UserController {
         return userService.updatePlayerStats(userId, playerStatsDTO)
                 .map(user -> ResponseEntity.ok(user))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+    }
+
+    @PutMapping("/user/updateTeam/{userId}/{teamId}")
+    public Mono<User> updateTeamId(@PathVariable String userId, @PathVariable String teamId) {
+        return userService.updateTeamId(userId, teamId);
     }
 }
