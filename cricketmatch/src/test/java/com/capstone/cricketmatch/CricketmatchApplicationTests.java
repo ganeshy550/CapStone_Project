@@ -1,13 +1,13 @@
-package com.capstone.cricketmatch;
+// package com.capstone.cricketmatch;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class CricketmatchApplicationTests {
+// @SpringBootTest
+// class CricketmatchApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }

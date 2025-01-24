@@ -65,10 +65,10 @@ public class MatchController {
         return matchService.endMatch(id, match.getWinner());
     }
 
-    @GetMapping("/getMatchStats/{id}")
-    public Mono<Match> getMatchStats(@PathVariable Long id) {
-        return matchService.getMatchStats(id);
-    }
+    // @GetMapping("/getMatchStats/{id}")
+    // public Mono<Match> getMatchStats(@PathVariable Long id) {
+    //     return matchService.getMatchStats(id);
+    // }
 
 
 }

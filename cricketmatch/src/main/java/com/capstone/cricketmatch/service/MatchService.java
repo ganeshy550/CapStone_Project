@@ -72,13 +72,4 @@ public class MatchService {
         .switchIfEmpty(Mono.error(new RuntimeException("Match not found")));
     }
 
-
-    public Mono<Match> getMatchStats(Long id) {
-        return matchRepository.findById(id)
-                .flatMap(match -> {
-                    // Logic to fetch match stats
-                    return Mono.just(match);
-                })
-                .switchIfEmpty(Mono.error(new RuntimeException("Match not found")));
-    }
 }
