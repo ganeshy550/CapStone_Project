@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,7 @@ public class TeamController {
     }
 
 
-    @PostMapping("/register")
+    @PutMapping("/register")
     public Mono<Team> registerUser(@RequestParam String matchId, @RequestParam String userId, @RequestParam String choice) {
         return teamService.registerUser(matchId, userId, choice);
     }

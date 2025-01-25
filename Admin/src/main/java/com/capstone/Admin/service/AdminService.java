@@ -13,7 +13,7 @@ public class AdminService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    private final String trainerServiceUrl = "http://localhost:9082/trainers";
+    private final String trainerServiceUrl = "http://localhost:8083/api/trainer";
 
     // Create a new trainer
     public Mono<TrainerDTO> createTrainer(TrainerDTO trainerDTO) {
@@ -30,7 +30,7 @@ public class AdminService {
     // Get all users
     public Mono<UserDTO[]> getAllUsers() {
         // Create WebClient instance
-        String userServiceUrl = "http://localhost:9080/users";
+        String userServiceUrl = "http://localhost:8082/users";
         WebClient webClient = webClientBuilder.baseUrl(userServiceUrl).build();
 
         return webClient.get()  // Use the GET method on the WebClient instance

@@ -17,7 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController // Use RestController instead of Controller for REST endpoints
-@RequestMapping("/api")
+@RequestMapping("/api/matches")
 public class MatchController {
 
     @Autowired

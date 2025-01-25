@@ -19,7 +19,7 @@ import com.capstone.Players.service.UserService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -44,43 +44,43 @@ public class UserController {
         return userService.updateUser(userId, user);
     }
 
-    @GetMapping("user/userId/{userId}")
+    @GetMapping("/userId/{userId}")
     public Mono<User> findByUserId(@PathVariable String userId) {
         return userService.findByUserId(userId);
     }
 
-    @GetMapping("/user/userName/{userName}")
+    @GetMapping("/userName/{userName}")
     public Mono<User> findByUserName(@PathVariable String userName) {
         return userService.findByUserName(userName);
     }
 
     // Get user by email
-    @GetMapping("/user/email/{userEmail}")
+    @GetMapping("/email/{userEmail}")
     public Mono<User> findByUserEmail(@PathVariable String userEmail) {
         return userService.findByUserEmail(userEmail);
     }
 
 
     // Get player stats
-    @GetMapping("user/stats/{userId}")
+    @GetMapping("/stats/{userId}")
     public Mono<PlayerStatsDTO> getPlayerStats(@PathVariable String userId) {
         return userService.getPlayerStats(userId);
     }
 
     // Fetch Batting Stats
-    @GetMapping("/user/batting-stats/{userId}")
+    @GetMapping("/battingStats/{userId}")
     public Mono<BattingStatsDTO> getBattingStats(@PathVariable String userId) {
         return userService.getBattingStats(userId);
     }
 
     // Fetch Bowling Stats
-    @GetMapping("/user/bowling-stats/{userId}")
+    @GetMapping("/bowlingStats/{userId}")
     public Mono<BowlingStatsDTO> getBowlingStats(@PathVariable String userId) {
         return userService.getBowlingStats(userId);
     }
 
     // Update player stats
-    @PutMapping("/user/update-stats/{userId}")
+    @PutMapping("/updateStats/{userId}")
     public Mono<ResponseEntity<User>> updatePlayerStats(
             @PathVariable String userId,
             @RequestBody PlayerStatsDTO playerStatsDTO) {
@@ -90,7 +90,7 @@ public class UserController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
-    @PutMapping("/user/updateTeam/{userId}/{teamId}")
+    @PutMapping("/updateTeam/{userId}/{teamId}")
     public Mono<User> updateTeamId(@PathVariable String userId, @PathVariable String teamId) {
         return userService.updateTeamId(userId, teamId);
     }

@@ -15,19 +15,16 @@ public class UserServiceClient {
         this.webClient = webClientBuilder.baseUrl(teamServiceUrl).build();
     }
 
-    public Mono<String> getUserDetails(String userId) {
+    public Mono<Object> getUserDetails(String userId) {
         return webClient.get()
-                .uri("/api/user/{userId}", userId)
+                .uri("/api/users/userId/{userId}", userId)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(Object.class);
     }
 
     public Mono<Void> updateTeam(String userId, String teamId) {
-        // PlayerUpdationRequest request = new PlayerUpdationRequest();
-        // request.setTeamId(userTeamId);
-        
         return webClient.put()
-                .uri("/api/user/updateTeam/{userId}/{teamId}", userId, teamId)
+                .uri("/api/users/updateTeam/{userId}/{teamId}", userId, teamId)
                 .retrieve()
                 .bodyToMono(Void.class);
     }
