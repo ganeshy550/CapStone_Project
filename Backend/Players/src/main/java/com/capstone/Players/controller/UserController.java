@@ -2,6 +2,7 @@ package com.capstone.Players.controller;
 
 import java.util.List;
 
+import com.capstone.Players.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.Players.dto.BattingStatsDTO;
-import com.capstone.Players.dto.BowlingStatsDTO;
-import com.capstone.Players.dto.LoginRequest;
-import com.capstone.Players.dto.LoginResponse;
-import com.capstone.Players.dto.OrganizerDTO;
-import com.capstone.Players.dto.PlayerStatsDTO;
 import com.capstone.Players.model.User;
 import com.capstone.Players.service.JwtService;
 import com.capstone.Players.service.UserService;
@@ -33,10 +28,20 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private SignUpRequest signUpRequest;
+
+    public UserController(SignUpRequest signUpRequest) {
+        this.signUpRequest = signUpRequest;
+    }
+
+    @Autowired
     private JwtService jwtService;
     // Create a new user
     @PostMapping("/createUser")
     public Mono<User> createUser(@RequestBody User user) {
+        signUpRequest.setUserName(user.getUserName());
+        signUpRequest.setUserEmail(user.getUserEmail());
+        signUpRequest.setUserId(user.getUserId());
         return userService.createUser(user);
     }
 

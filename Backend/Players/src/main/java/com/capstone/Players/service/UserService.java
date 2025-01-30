@@ -7,15 +7,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import com.capstone.Players.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.capstone.Players.dto.BattingStatsDTO;
-import com.capstone.Players.dto.BowlingStatsDTO;
-import com.capstone.Players.dto.OrganizerDTO;
-import com.capstone.Players.dto.PlayerStatsDTO;
 import com.capstone.Players.model.User;
 import com.capstone.Players.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +24,10 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private EmailService emailService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -48,6 +49,12 @@ private final Map<String, PlayerStatsDTO> latestStats = new ConcurrentHashMap<>(
     public Mono<User> createUser(User user) {
         // Encode password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        try {
+            emailService.sendWelcomeEmail(user.getUserEmail(), user.getUserId());
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception
+        }
         return userRepository.save(user);
     }
 

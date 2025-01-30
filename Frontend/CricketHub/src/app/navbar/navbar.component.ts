@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
         <a routerLink="/player-summary" class="navbar-link">Player Profile</a>
       </div>
       <ul>
-        
+
         <li><a [class.active]="isActive('/home')" (click)="home()">Home</a></li>
         <li><a [class.active]="isActive('/player-dashboard')" (click)="player()">Play</a></li>
         <li><a [class.active]="isActive('/organizer-dashboard')" (click)="organize()">Organize</a></li>
@@ -179,7 +179,7 @@ leaderboard() {
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['login']);
+    this.router.navigate(['']);
     // localStorage.removeItem('playerData');
     // localStorage.removeItem('matches');
     // localStorage.removeItem('userId');
